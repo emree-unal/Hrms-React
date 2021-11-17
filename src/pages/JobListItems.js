@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { Button, Card, Image, Label } from "semantic-ui-react";
-import { useSelector } from "react-redux";
+import React , { useState, useEffect }from "react";
+import { NavLink } from "react-router-dom";
+import { Card,Label,Button } from 'semantic-ui-react'
 import JobAdvertisementService from "../services/jobAdvertisementService";
 
-export default function HomeJobList() {
-  const [jobs, setJobs] = useState([]);
+export default function JobListItems() {
+    const [jobs, setJobs] = useState([]);
 
-  useEffect(() => {
-    let jobService = new JobAdvertisementService();
-    jobService
-      .getJobAdvertisements()
-      .then((result) => setJobs(result.data.data));
-  }, []);
-
+    useEffect(() => {
+      let jobService = new JobAdvertisementService();
+      jobService
+        .getJobAdvertisements()
+        .then((result) => setJobs(result.data.data));
+    }, []);
   return (
     <div>
-      <Card.Group>
-        {jobs.map((job) => (
-          <Card key={job.id}>
+     
+          
+          {jobs.map((job) => (
+          <Card key={job.id} fluid color="purple" as={NavLink} to={`/jobdetails/${job.id}`} >
             <Card.Content>
+            
+             <Button compact circular color="yellow" icon="bookmark" floated="right"  />
               <Card.Header>{job.jobTitle}</Card.Header>
               <Card.Meta>{job.companyName}</Card.Meta>
               <Card.Meta>
@@ -40,16 +42,16 @@ export default function HomeJobList() {
                 <strong>Closing Date</strong>
                 &nbsp;&nbsp;
                 {new Date(job.applicationDeadline).toDateString()}
+                <Card.Meta textAlign="right">{job.city}</Card.Meta>
               </Card.Description>
             </Card.Content>
-            <Card.Content extra>
-              <div className="ui two buttons">
-                <Button color="purple">View Detail</Button>
-              </div>
-            </Card.Content>
+            
+            
           </Card>
         ))}
-      </Card.Group>
+          
+     
+    
     </div>
   );
 }
